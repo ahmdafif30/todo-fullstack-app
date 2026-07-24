@@ -42,7 +42,7 @@ const updateTaskById = (id, title, callback) => {
 
 const updateTaskStatusById = (id, status, callback) => {
   const sql = `UPDATE tasks SET status = ? WHERE id = ?`
-  db.query(sql, [id, status], (err, result) => {
+  db.query(sql, [status, id], (err, result) => {
     callback(err, result)
   })
 }

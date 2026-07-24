@@ -6,9 +6,9 @@ function TaskList({tasks, fetchTask,editingId, setEditingId, editTitle, setEditT
         {tasks.map((data) => (
             <TaskItem
             key={data.id}
-
             id={data.id}
             title={data.title}
+            status = {data.status}
 
             fetchTask = {fetchTask}
 

@@ -1,6 +1,6 @@
-import { deleteTask, updateTaskById } from "../taskApi";
+import { deleteTask, updateTaskById, updateTaskStatusById } from "../taskApi";
 
-function TaskItem({ id, title, fetchTask, editingId, setEditingId, editTitle, setEditTitle }) {
+function TaskItem({ id, title, status, fetchTask, editingId, setEditingId, editTitle, setEditTitle }) {
   const handleDelete = async () => {
     const confirmDelete = window.confirm(`Apakah kamu ingin menghapus task: \n\n "${title}"?`);
     if (!confirmDelete) {
@@ -37,9 +37,36 @@ function TaskItem({ id, title, fetchTask, editingId, setEditingId, editTitle, se
     setEditTitle("");
   };
 
+  const handleStatus = async () => {
+    const newStatus = status === 0 ? 1 : 0;
+    try {
+      await updateTaskStatusById(id, newStatus);
+      await fetchTask();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="bg-white flex justify-between rounded-xl px-4 py-3 items-center">
-      {editingId === id ? <input type="text" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} className="flex-1 border rounded-lg px-3 py-2 mr-4" /> : <span>{title}</span>}
+      <div className="flex items-center gap-2">
+        {/* checkbox */}
+        <input type="checkbox" checked={status === 1} onChange={handleStatus} />
+
+        {/* title */}
+        {editingId === id ? (
+          <input type="text" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} className="flex-1 border rounded-lg px-3 py-2 mr-4" />
+        ) : (
+          <span
+            className={`
+          ${status === 1 ? "line-through text-gray-400 opacity-80" : "text-black"}`}
+          >
+            {title}
+          </span>
+        )}
+      </div>
+
+      {/* Button */}
       <div className="flex gap-3">
         {editingId === id ? (
           <>
